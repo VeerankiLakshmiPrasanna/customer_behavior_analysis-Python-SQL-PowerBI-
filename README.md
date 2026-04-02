@@ -4,11 +4,13 @@ Developed an end-to-end data analytics project analyzing customer behavior using
 Customer Behavior Data Analytics Project
 
 **Overview**
+
 This project is an end-to-end Data Analytics solution that analyzes customer shopping behavior to generate meaningful business insights. It uses Python, SQL, and Power BI to perform data cleaning, analysis, and visualization.
 
 The goal of this project is to help businesses understand customer patterns, improve decision-making, and increase revenue through data-driven strategies.
 
 **Objectives**
+
 Analyze customer purchasing behavior
 Identify key revenue-driving segments
 Evaluate the impact of discounts and promotions
@@ -16,11 +18,13 @@ Understand customer loyalty and subscription trends
 Build interactive dashboards for business insights
 
 **Tech Stack**
+
 Python → Data cleaning & preprocessing
 SQL (PostgreSQL/MySQL) → Data analysis
 Power BI → Data visualization & dashboards
 
 **Project Workflow**
+
 1. Data Preparation (Python)
 Handled missing values
 Standardized column names
@@ -46,6 +50,7 @@ Added filters for dynamic analysis
 
 
 **Key Insights**
+
 Young adults contribute the highest revenue
 Customers using discounts tend to spend more
 Low subscription conversion among repeat buyers
@@ -53,6 +58,7 @@ Certain product categories drive higher sales
 
 
 **Business Recommendations**
+
 Target high-value customer segments with focused marketing
 Improve subscription conversion strategies
 Optimize discount campaigns
@@ -66,6 +72,7 @@ Promote high-rated products
 
 
 **Future Scope**
+
 Integrate machine learning models for prediction
 Build real-time dashboards
 Deploy as a web-based analytics tool
