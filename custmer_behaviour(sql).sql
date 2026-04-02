@@ -5,7 +5,87 @@ select gender, SUM(purchase_amount) as revenue
 from customer
 group by gender
 
---2. Which cu
+--2. Which customers used a discount and spent more than the overall average purchase amount?
 select customer_id, purchase_amount 
 from customer
 where discount_applied= 'Yes' and purchase_amount >= (select AVG(purchase_amount) from customer)
+
+--3.Which top 5 items have the highest average customer rating?
+SELECT item_purchased,
+       ROUND(AVG(review_rating)::numeric, 2) AS avg_rating
+FROM   customer
+GROUP BY item_purchased
+ORDER BY avg_rating DESC
+LIMIT 5;
+
+--4. What is the average spend for each shipping method (standard vs. express)?
+SELECT 
+    shipping_type,
+    ROUND(AVG(purchase_amount), 2)
+FROM customer
+WHERE shipping_type IN ('Standard', 'Express')
+GROUP BY shipping_type;
+
+--5.  Spend Comparison: Subscribers vs. Non‑Subscribers?How do subscription status, customer count, average spend, and total revenue differ?
+SELECT subscription_status,
+       COUNT(customer_id) AS total_customers,
+       ROUND(AVG(purchase_amount), 2) AS avg_spend,
+       ROUND(SUM(purchase_amount), 2)  AS total_revenue
+FROM   customer
+GROUP BY subscription_status
+ORDER BY total_revenue DESC;
+
+--6. Products 5 with Highest Discount Usage ? Which items have the greatest proportion of discounted purchases?
+SELECT 
+    item_purchased,
+    ROUND(100 * AVG(CASE WHEN LOWER(discount_applied) = 'yes' THEN 1 ELSE 0 END), 2) 
+    AS discount_rate_percent
+FROM customer
+GROUP BY item_purchased
+ORDER BY discount_rate_percent DESC
+LIMIT 5;
+
+--7. Customer Segmentation by Purchase History? How many customers fall into “new”, “returning”, or “loyal” segments based on previous purchase counts?
+WITH customer_type AS (
+    SELECT customer_id,
+           CASE
+               WHEN previous_purchases = 1                THEN 'New'
+               WHEN previous_purchases BETWEEN 2 AND 10   THEN 'Returning'
+               ELSE 'loyal'
+           END AS customer_segment
+    FROM   customer
+)
+SELECT customer_segment,
+       COUNT(*) AS segment_count
+FROM   customer_type
+GROUP BY customer_segment;
+
+--8. Top 3 Products per Category ? Within each product category, which three items have the most orders?
+WITH item_counts AS (
+    SELECT category,
+           item_purchased,
+           COUNT(customer_id) AS total_orders,
+           ROW_NUMBER() OVER (PARTITION BY category ORDER BY COUNT(customer_id) DESC) AS item_rank
+    FROM   customer
+    GROUP BY category, item_purchased
+)
+SELECT item_rank,
+		category,
+       item_purchased,
+       total_orders
+FROM   item_counts
+WHERE  item_rank <= 3;
+
+--9. Repeat‑Buyer & Subscription Analysis? How many repeat buyers ( more than 5 previous purchases) are subscribed vs. not subscribed?
+SELECT subscription_status,
+       COUNT(customer_id) AS repeat_buyers
+FROM   customer
+WHERE  previous_purchases > 5
+GROUP BY subscription_status;
+
+--10. Revenue by Age Group? What total revenue does each age segment generate?
+SELECT age_group,
+       SUM(purchase_amount) AS total_revenue
+FROM   customer
+GROUP BY age_group
+ORDER BY total_revenue DESC;
